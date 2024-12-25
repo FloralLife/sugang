@@ -1,0 +1,17 @@
+services:
+  mysql:
+    container_name: sugang-mysql
+    image: mysql:8.2.0
+    restart: always
+    volumes:
+      - ./db/mysql/data:/var/lib/mysql
+    environment:
+      MYSQl_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sugang
+      MYSQL_USER: sugang
+      MYSQL_PASSWORD: sugang@1234
+      TZ: Asia/Seoul
+    ports:
+      - 40036:3306
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
