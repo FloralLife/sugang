@@ -5,5 +5,7 @@ interface EnrollmentRepository {
 
   fun findByUserId(userId: Long): List<Enrollment>
 
+  fun findByUserIdAndLectureId(userId: Long, lectureId: Long): List<Enrollment>
+
   fun save(enrollment: Enrollment): Enrollment
 }

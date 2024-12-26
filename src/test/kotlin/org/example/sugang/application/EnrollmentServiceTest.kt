@@ -95,7 +95,8 @@ class EnrollmentServiceTest {
     )
 
     val participantCount = LectureParticipantCount(randomId(), lecture, 0)
-
+    `when`(enrollmentRepository.findByUserIdAndLectureId(enrollment.userId, enrollment.lecture.id))
+      .thenReturn(listOf())
     `when`(lectureParticipantCountRepository.findByLectureId(lecture.id))
       .thenReturn(participantCount)
 
@@ -103,6 +104,25 @@ class EnrollmentServiceTest {
 
     verify(enrollmentRepository).save(enrollment)
     assertEquals(1, participantCount.count)
+  }
+
+  @Test
+  @Description("한 유저가 같은 특강에 두번 등록하면 에러 발생")
+  fun enrollDuplicatedThenIllegalStateException() {
+    val enrollment = Enrollment(
+      id = randomId(),
+      userId = randomId(),
+      lecture = lecture,
+      deletedAt = null
+    )
+
+    val participantCount = LectureParticipantCount(randomId(), lecture, 0)
+
+    `when`(enrollmentRepository.findByUserIdAndLectureId(enrollment.userId, enrollment.lecture.id))
+      .thenReturn(listOf(enrollment))
+
+    assertThrows(IllegalStateException::class.java) { enrollmentService.enroll(enrollment) }
+    verify(enrollmentRepository, never()).save(enrollment)
   }
 
   @Test
@@ -117,6 +137,8 @@ class EnrollmentServiceTest {
 
     val participantCount = LectureParticipantCount(randomId(), lecture, 30)
 
+    `when`(enrollmentRepository.findByUserIdAndLectureId(enrollment.userId, enrollment.lecture.id))
+      .thenReturn(listOf())
     `when`(lectureParticipantCountRepository.findByLectureId(lecture.id))
       .thenReturn(participantCount)
 
@@ -124,6 +146,8 @@ class EnrollmentServiceTest {
     verify(enrollmentRepository, never()).save(enrollment)
     assertEquals(30, participantCount.count)
   }
+
+
 
   @Test
   @Description("취소하면 count도 감소")

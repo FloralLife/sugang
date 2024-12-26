@@ -17,6 +17,10 @@ class EnrollmentRepositoryImpl(
     return jpaEnrollmentRepository.findAllByUserId(userId)
   }
 
+  override fun findByUserIdAndLectureId(userId: Long, lectureId: Long): List<Enrollment> {
+    return jpaEnrollmentRepository.findByUserIdAndLectureId(userId, lectureId)
+  }
+
   override fun save(enrollment: Enrollment): Enrollment {
     return jpaEnrollmentRepository.save(enrollment)
   }

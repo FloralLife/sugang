@@ -22,6 +22,12 @@ class EnrollmentService(
 
   @Transactional
   fun enroll(enrollment: Enrollment): Enrollment {
+    check(
+      enrollmentRepository.findByUserIdAndLectureId(
+        enrollment.userId,
+        enrollment.lecture.id
+      ).isEmpty()
+    ) { "이미 등록된 특강입니다." }
     val participantCount = lectureParticipantCountRepository.findByLectureId(enrollment.lecture.id)!!
     participantCount.enroll()
     lectureParticipantCountRepository.save(participantCount)
