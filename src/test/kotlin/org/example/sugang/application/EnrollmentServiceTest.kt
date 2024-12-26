@@ -96,7 +96,7 @@ class EnrollmentServiceTest {
 
     val participantCount = LectureParticipantCount(randomId(), lecture, 0)
 
-    `when`(lectureParticipantCountRepository.findByLectureIdWithLock(lecture.id))
+    `when`(lectureParticipantCountRepository.findByLectureId(lecture.id))
       .thenReturn(participantCount)
 
     enrollmentService.enroll(enrollment)
@@ -117,7 +117,7 @@ class EnrollmentServiceTest {
 
     val participantCount = LectureParticipantCount(randomId(), lecture, 30)
 
-    `when`(lectureParticipantCountRepository.findByLectureIdWithLock(lecture.id))
+    `when`(lectureParticipantCountRepository.findByLectureId(lecture.id))
       .thenReturn(participantCount)
 
     assertThrows(IllegalStateException::class.java) { enrollmentService.enroll(enrollment) }

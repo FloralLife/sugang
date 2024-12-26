@@ -22,8 +22,9 @@ class EnrollmentService(
 
   @Transactional
   fun enroll(enrollment: Enrollment): Enrollment {
-    val participantCount = lectureParticipantCountRepository.findByLectureIdWithLock(enrollment.lecture.id)!!
+    val participantCount = lectureParticipantCountRepository.findByLectureId(enrollment.lecture.id)!!
     participantCount.enroll()
+    lectureParticipantCountRepository.save(participantCount)
     return enrollmentRepository.save(enrollment)
   }
 
