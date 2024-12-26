@@ -2,12 +2,16 @@ package org.example.sugang.domain
 
 import jakarta.persistence.Entity
 import jakarta.persistence.EntityListeners
+import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
-import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
+import org.springframework.format.annotation.DateTimeFormat
+import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Entity
@@ -23,9 +27,26 @@ class Lecture(
 
   val instructor: String,
 
-  val startedAt: LocalDateTime,
+  var date: LocalDate,
 
-  @CreatedDate
-  val createdAt: LocalDateTime = LocalDateTime.MIN,
+  @OneToOne(mappedBy = "lecture", fetch = FetchType.LAZY)
+  val participantCount: LectureParticipantCount?,
+
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  val createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
+  init {
+    validateDate()
+  }
+
+  fun initLectureParticipantCount(): LectureParticipantCount {
+    return LectureParticipantCount(
+      lecture = this,
+      count = 0
+    )
+  }
+
+  fun validateDate() {
+    require(date.dayOfWeek == DayOfWeek.SATURDAY) { "특강은 토요일에만 가능합니다." }
+  }
 }
