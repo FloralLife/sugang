@@ -22,4 +22,13 @@ class LectureParticipantCount(
 
   var count: Int
 ) {
+  fun enroll() {
+    check(count < MAX_PARTICIPANTS) { "특강 정원이 가득 찼습니다." }
+    count++
+  }
+
+  fun cancel() {
+    check(count > 0) { "특강 등록 카운트가 유효하지 않습니다."}
+    count--
+  }
 }

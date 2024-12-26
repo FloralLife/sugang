@@ -13,6 +13,10 @@ class LectureParticipantCountRepositoryImpl(
     return jpaLectureParticipantCountRepository.findByIdOrNull(lectureId)
   }
 
+  override fun findByLectureIdWithLock(lectureId: Long): LectureParticipantCount? {
+    return jpaLectureParticipantCountRepository.findByLectureIdWithLock(lectureId)
+  }
+
   override fun save(lectureParticipantCount: LectureParticipantCount): LectureParticipantCount {
     return jpaLectureParticipantCountRepository.save(lectureParticipantCount)
   }

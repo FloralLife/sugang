@@ -9,8 +9,8 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
-import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
+import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDateTime
 
 @Entity
@@ -26,8 +26,13 @@ class Enrollment(
 
   val userId: Long,
 
-  @CreatedDate
-  var createdAt: LocalDateTime = LocalDateTime.MIN,
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  var createdAt: LocalDateTime = LocalDateTime.now(),
 
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   var deletedAt: LocalDateTime?,
-) {}
+) {
+  fun cancel() {
+    deletedAt = LocalDateTime.now()
+  }
+}
