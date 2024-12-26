@@ -45,8 +45,7 @@ class ConcurrencyTest @Autowired constructor(
         val contentAsString = mockMvc.post("/api/enrollments") {
           contentType = MediaType.APPLICATION_JSON
           content = it
-        }.andReturn().response.contentAsString
-        println(contentAsString)
+        }
       }
 
     mockMvc.get("/api/lectures/1")
